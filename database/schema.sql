@@ -1,7 +1,7 @@
 BEGIN TRANSACTION;
 
-DROP TABLE IF EXISTS users, meal_plan, users_meal_plan, meal_day, meal_type, meal, meal_entry, meal_plan_meal_entry,
-    recipe, meal_recipe, category, recipe_category, ingredient, recipe_ingredient, grocery_list, grocery_list_ingredient;
+--DROP TABLE IF EXISTS users, meal_plan, users_meal_plan, meal_day, meal_type, meal, meal_entry, meal_plan_meal_entry,
+--    recipe, meal_recipe, category, recipe_category, ingredient, recipe_ingredient, grocery_list, grocery_list_ingredient;
 
 CREATE TABLE users (
 	user_id SERIAL,
@@ -33,7 +33,7 @@ CREATE TABLE meal_day (
 
 CREATE TABLE meal_type (
     meal_type_id SERIAL,
-    meal_type_name varchar(10) NOT NULL,
+    meal_type_name varchar(20) NOT NULL,
     CONSTRAINT PK_meal_type PRIMARY KEY (meal_type_id)
 );
 
