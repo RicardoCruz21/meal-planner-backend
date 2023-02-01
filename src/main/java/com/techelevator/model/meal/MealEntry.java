@@ -3,8 +3,8 @@ package com.techelevator.model.meal;
 public class MealEntry {
 
     private int id;
-    private MealDay mealDay;
-    private MealType mealType;
+    private String mealDay;
+    private String mealType;
     private Meal meal;
 
     public int getId() {
@@ -15,19 +15,19 @@ public class MealEntry {
         this.id = id;
     }
 
-    public MealDay getMealDay() {
+    public String getMealDay() {
         return mealDay;
     }
 
-    public void setMealDay(MealDay mealDay) {
+    public void setMealDay(String mealDay) {
         this.mealDay = mealDay;
     }
 
-    public MealType getMealType() {
+    public String getMealType() {
         return mealType;
     }
 
-    public void setMealType(MealType mealType) {
+    public void setMealType(String mealType) {
         this.mealType = mealType;
     }
 
