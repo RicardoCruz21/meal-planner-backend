@@ -70,6 +70,14 @@ CREATE TABLE recipe (
     CONSTRAINT PK_recipe PRIMARY KEY (recipe_id)
 );
 
+CREATE TABLE users_recipe (
+    user_id int NOT NULL,
+    recipe_id int NOT NULL,
+    CONSTRAINT PK_users_recipe PRIMARY KEY (user_id, recipe_id),
+    CONSTRAINT FK_users_recipe_users FOREIGN KEY (user_id) REFERENCES users (user_id),
+    CONSTRAINT FK_users_recipe_recipe FOREIGN KEY (recipe_id) REFERENCES recipe (recipe_id)
+);
+
 CREATE TABLE meal_recipe (
     meal_id int NOT NULL,
     recipe_id int NOT NULL,
