@@ -50,4 +50,8 @@ INSERT INTO recipe_category (recipe_id, category_id) VALUES (1, 1);
 INSERT INTO recipe_category (recipe_id, category_id) VALUES (2, 3);
 INSERT INTO recipe_category (recipe_id, category_id) VALUES (3, 2);
 
+INSERT INTO users_recipe (user_id, recipe_id) VALUES (2, 1);
+INSERT INTO users_recipe (user_id, recipe_id) VALUES (2, 2);
+INSERT INTO users_recipe (user_id, recipe_id) VALUES (2, 3);
+
 COMMIT TRANSACTION;
