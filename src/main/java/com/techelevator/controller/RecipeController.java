@@ -2,13 +2,9 @@ package com.techelevator.controller;
 
 import com.techelevator.dao.RecipeDao;
 import com.techelevator.model.meal.Recipe;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -32,5 +28,11 @@ public class RecipeController {
     @GetMapping("/recipes/{id}")
     public Recipe getRecipe(@PathVariable int id) {
         return recipeDao.getRecipeById(id);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/recipes")
+    public void createRecipe(@RequestBody Recipe recipe) {
+        recipeDao.create(recipe);
     }
 }
