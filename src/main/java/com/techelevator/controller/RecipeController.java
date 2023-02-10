@@ -17,11 +17,11 @@ public class RecipeController {
     }
 
     @GetMapping("/recipes")
-    public List<Recipe> getRecipes(@RequestParam(defaultValue = "") String user_id) {
-        if (user_id.equals("")) {
+    public List<Recipe> getRecipes(@RequestParam(name = "user_id", defaultValue = "") String userId) {
+        if (userId.equals("")) {
             return recipeDao.findAllPublic();
         } else {
-            return recipeDao.findAllByUserId(Integer.parseInt(user_id));
+            return recipeDao.findAllByUserId(Integer.parseInt(userId));
         }
     }
 

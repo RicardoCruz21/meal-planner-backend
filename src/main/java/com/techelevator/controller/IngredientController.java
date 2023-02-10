@@ -24,7 +24,7 @@ public class IngredientController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/ingredients")
-    public int addNewIngredient(@RequestBody String ingredient) {
-        return ingredientDao.create(ingredient);
+    public int addNewIngredient(@RequestBody IngredientDto ingredientDto) {
+        return ingredientDao.create(ingredientDto.getName());
     }
 }
