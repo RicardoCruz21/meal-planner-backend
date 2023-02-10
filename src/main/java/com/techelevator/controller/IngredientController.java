@@ -2,6 +2,7 @@ package com.techelevator.controller;
 
 import com.techelevator.dao.IngredientDao;
 import com.techelevator.model.meal.Ingredient;
+import com.techelevator.model.mealDto.IngredientDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class IngredientController {
     }
 
     @GetMapping("/ingredients")
-    public List<Ingredient> getIngredients() {
+    public List<IngredientDto> getIngredients() {
         return ingredientDao.findAll();
     }
 

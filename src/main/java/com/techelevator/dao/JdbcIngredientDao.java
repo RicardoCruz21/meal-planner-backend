@@ -1,6 +1,7 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.meal.Ingredient;
+import com.techelevator.model.mealDto.IngredientDto;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -25,8 +26,14 @@ public class JdbcIngredientDao implements IngredientDao {
     }
 
     @Override
-    public List<Ingredient> findAll() {
-        return null;
+    public List<IngredientDto> findAll() {
+        List<IngredientDto> ingredients = new ArrayList<>();
+        String sql = "SELECT * FROM ingredient ORDER BY ingredient_name;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        while(results.next()) {
+            ingredients.add(mapRowToIngredientDto(results));
+        }
+        return ingredients;
     }
 
     @Override
@@ -49,6 +56,13 @@ public class JdbcIngredientDao implements IngredientDao {
         ingredient.setName(rowSet.getString("ingredient_name"));
         ingredient.setQuantity(rowSet.getDouble("quantity"));
         ingredient.setUnitOfMeasure(rowSet.getString("unit_of_measure"));
+        return ingredient;
+    }
+
+    private IngredientDto mapRowToIngredientDto(SqlRowSet rowSet) {
+        IngredientDto ingredient = new IngredientDto();
+        ingredient.setId(rowSet.getInt("ingredient_id"));
+        ingredient.setName(rowSet.getString("ingredient_name"));
         return ingredient;
     }
 }
