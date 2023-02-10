@@ -2,9 +2,11 @@ package com.techelevator.dao;
 
 import com.techelevator.model.meal.Ingredient;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class JdbcIngredientDao implements IngredientDao {
 
     private final JdbcTemplate jdbcTemplate;
@@ -14,8 +16,8 @@ public class JdbcIngredientDao implements IngredientDao {
     }
 
     @Override
-    public boolean create(String name) {
-        return false;
+    public int create(String name) {
+        return 0;
     }
 
     @Override

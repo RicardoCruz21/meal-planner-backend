@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IngredientDao {
 
-    boolean create(String name);
+    int create(String name);
     List<Ingredient> findAll();
     List<Ingredient> findAllByRecipeId(int recipeId);
 }
