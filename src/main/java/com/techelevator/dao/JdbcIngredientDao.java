@@ -19,7 +19,9 @@ public class JdbcIngredientDao implements IngredientDao {
 
     @Override
     public int create(String name) {
-        return 0;
+        String sql = "INSERT INTO ingredient (ingredient_name) VALUES (?) RETURNING ingredient_id;";
+        int ingredientId = jdbcTemplate.queryForObject(sql, int.class, name);
+        return ingredientId;
     }
 
     @Override
