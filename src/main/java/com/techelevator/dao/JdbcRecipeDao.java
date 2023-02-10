@@ -14,9 +14,11 @@ import java.util.List;
 public class JdbcRecipeDao implements RecipeDao {
 
     private final JdbcTemplate jdbcTemplate;
+    private IngredientDao ingredientDao;
 
-    public JdbcRecipeDao(JdbcTemplate jdbcTemplate) {
+    public JdbcRecipeDao(JdbcTemplate jdbcTemplate, IngredientDao ingredientDao) {
         this.jdbcTemplate = jdbcTemplate;
+        this.ingredientDao = ingredientDao;
     }
 
     @Override
@@ -58,14 +60,7 @@ public class JdbcRecipeDao implements RecipeDao {
             recipe = mapRowToRecipe(results);
         }
 
-        String sqlForIngredients = "SELECT i.ingredient_id, i.ingredient_name, ri.quantity, ri.unit_of_measure " +
-                                   "FROM ingredient AS i " +
-                                   "JOIN recipe_ingredient AS ri ON i.ingredient_id = ri.ingredient_id " +
-                                   "WHERE ri.recipe_id = ?;";
-        SqlRowSet ingredients = jdbcTemplate.queryForRowSet(sqlForIngredients, recipeId);
-        while (ingredients.next()) {
-            recipe.getIngredientList().add(mapRowToIngredient(ingredients));
-        }
+        recipe.setIngredientList(ingredientDao.findAllByRecipeId(recipeId));
 
         String sqlForCategories = "SELECT c.category_id, c.category_name " +
                 "FROM category AS c " +
@@ -96,15 +91,6 @@ public class JdbcRecipeDao implements RecipeDao {
         recipe.setInstructions(rowSet.getString("instructions"));
         recipe.setSharable(rowSet.getBoolean("is_sharable"));
         return recipe;
-    }
-
-    private Ingredient mapRowToIngredient(SqlRowSet rowSet) {
-        Ingredient ingredient = new Ingredient();
-        ingredient.setId(rowSet.getInt("ingredient_id"));
-        ingredient.setName(rowSet.getString("ingredient_name"));
-        ingredient.setQuantity(rowSet.getDouble("quantity"));
-        ingredient.setUnitOfMeasure(rowSet.getString("unit_of_measure"));
-        return ingredient;
     }
 
     private Category mapRowToCategory(SqlRowSet rowSet) {
