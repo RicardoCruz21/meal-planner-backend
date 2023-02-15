@@ -15,10 +15,12 @@ public class JdbcRecipeDao implements RecipeDao {
 
     private final JdbcTemplate jdbcTemplate;
     private IngredientDao ingredientDao;
+    private CategoryDao categoryDao;
 
-    public JdbcRecipeDao(JdbcTemplate jdbcTemplate, IngredientDao ingredientDao) {
+    public JdbcRecipeDao(JdbcTemplate jdbcTemplate, IngredientDao ingredientDao, CategoryDao categoryDao) {
         this.jdbcTemplate = jdbcTemplate;
         this.ingredientDao = ingredientDao;
+        this.categoryDao = categoryDao;
     }
 
     @Override
@@ -61,15 +63,7 @@ public class JdbcRecipeDao implements RecipeDao {
         }
 
         recipe.setIngredientList(ingredientDao.findAllByRecipeId(recipeId));
-
-        String sqlForCategories = "SELECT c.category_id, c.category_name " +
-                "FROM category AS c " +
-                "JOIN recipe_category AS rc ON c.category_id = rc.category_id " +
-                "WHERE rc.recipe_id = ?;";
-        SqlRowSet categories = jdbcTemplate.queryForRowSet(sqlForCategories, recipeId);
-        if (categories.next()) {
-            recipe.getCategoryList().add(mapRowToCategory(categories));
-        }
+        recipe.setCategoryList(categoryDao.findAllByRecipeId(recipeId));
 
         return recipe;
     }
