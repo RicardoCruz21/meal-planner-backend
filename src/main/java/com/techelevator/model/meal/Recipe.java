@@ -12,6 +12,18 @@ public class Recipe {
     private List<Category> categoryList = new ArrayList<>();
     private boolean isSharable;
 
+    public Recipe() {
+    }
+
+    public Recipe(int id, String name, String instructions, List<Ingredient> ingredientList, List<Category> categoryList, boolean isSharable) {
+        this.id = id;
+        this.name = name;
+        this.instructions = instructions;
+        this.ingredientList = ingredientList;
+        this.categoryList = categoryList;
+        this.isSharable = isSharable;
+    }
+
     public int getId() {
         return id;
     }

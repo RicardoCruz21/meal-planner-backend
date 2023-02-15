@@ -3,6 +3,7 @@ package com.techelevator.dao;
 import com.techelevator.model.meal.Category;
 import com.techelevator.model.meal.Ingredient;
 import com.techelevator.model.meal.Recipe;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -14,8 +15,8 @@ import java.util.List;
 public class JdbcRecipeDao implements RecipeDao {
 
     private final JdbcTemplate jdbcTemplate;
-    private IngredientDao ingredientDao;
-    private CategoryDao categoryDao;
+    private final IngredientDao ingredientDao;
+    private final CategoryDao categoryDao;
 
     public JdbcRecipeDao(JdbcTemplate jdbcTemplate, IngredientDao ingredientDao, CategoryDao categoryDao) {
         this.jdbcTemplate = jdbcTemplate;
@@ -24,8 +25,27 @@ public class JdbcRecipeDao implements RecipeDao {
     }
 
     @Override
-    public boolean create(Recipe recipe) {
-        return false;
+    public void create(Recipe recipe, int userId) {
+
+        // Insert recipe into recipe table return the new recipe id
+        String sql = "INSERT INTO recipe (recipe_name, instructions, is_sharable) VALUES (?, ?, ?) RETURNING recipe_id;";
+        int recipeId = jdbcTemplate.queryForObject(sql, int.class, recipe.getName(), recipe.getInstructions(), recipe.isSharable());
+
+        // Insert recipeId and userId into the users_recipe table
+        String sqlForUserRecipe = "INSERT INTO users_recipe (user_id, recipe_id) VALUES (?, ?);";
+        jdbcTemplate.update(sqlForUserRecipe, userId, recipeId);
+
+        // Insert each ingredient in recipe into recipe_ingredient table
+        for (Ingredient ingredient : recipe.getIngredientList()) {
+            String sqlForIngredients = "INSERT INTO recipe_ingredient (recipe_id, ingredient_id, quantity, unit_of_measure) VALUES (?, ?, ?, ?);";
+            jdbcTemplate.update(sqlForIngredients, recipeId, ingredient.getId(), ingredient.getQuantity(), ingredient.getUnitOfMeasure());
+        }
+
+        // Insert each category in recipe into recipe_category table
+        for (Category category : recipe.getCategoryList()) {
+            String sqlForCategories = "INSERT INTO recipe_category (recipe_id, category_id) VALUES (?, ?);";
+            jdbcTemplate.update(sqlForCategories, recipeId, category.getId());
+        }
     }
 
     @Override
@@ -87,10 +107,4 @@ public class JdbcRecipeDao implements RecipeDao {
         return recipe;
     }
 
-    private Category mapRowToCategory(SqlRowSet rowSet) {
-        Category category = new Category();
-        category.setId(rowSet.getInt("category_id"));
-        category.setName(rowSet.getString("category_name"));
-        return category;
-    }
 }

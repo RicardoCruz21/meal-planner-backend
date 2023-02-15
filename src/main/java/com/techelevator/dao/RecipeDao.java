@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface RecipeDao {
 
-    boolean create(Recipe recipe);
+    void create(Recipe recipe, int userId);
     List<Recipe> findAllByUserId(int userId);
     List<Recipe> findAllPublic();
     Recipe getRecipeById(int recipeId);

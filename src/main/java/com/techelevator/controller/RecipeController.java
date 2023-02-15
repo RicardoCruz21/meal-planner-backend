@@ -1,19 +1,23 @@
 package com.techelevator.controller;
 
 import com.techelevator.dao.RecipeDao;
+import com.techelevator.dao.UserDao;
 import com.techelevator.model.meal.Recipe;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
 public class RecipeController {
 
     private RecipeDao recipeDao;
+    private UserDao userDao;
 
-    public RecipeController(RecipeDao recipeDao) {
+    public RecipeController(RecipeDao recipeDao, UserDao userDao) {
         this.recipeDao = recipeDao;
+        this.userDao = userDao;
     }
 
     @GetMapping("/recipes")
@@ -32,7 +36,8 @@ public class RecipeController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/recipes")
-    public void createRecipe(@RequestBody Recipe recipe) {
-        recipeDao.create(recipe);
+    public void createRecipe(@RequestBody Recipe recipe, Principal principal) {
+        int userId = userDao.findIdByUsername(principal.getName());
+        recipeDao.create(recipe, userId);
     }
 }
