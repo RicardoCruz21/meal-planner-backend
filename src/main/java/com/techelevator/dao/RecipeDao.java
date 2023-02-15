@@ -10,6 +10,6 @@ public interface RecipeDao {
     List<Recipe> findAllByUserId(int userId);
     List<Recipe> findAllPublic();
     Recipe getRecipeById(int recipeId);
-    boolean update(Recipe recipe);
+    void update(Recipe recipe);
     boolean delete(int recipeId);
 }

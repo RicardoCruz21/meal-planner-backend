@@ -89,8 +89,13 @@ public class JdbcRecipeDao implements RecipeDao {
     }
 
     @Override
-    public boolean update(Recipe recipe) {
-        return false;
+    public void update(Recipe recipe) {
+
+        // Update recipe data in recipe table
+
+        // Update ingredients in recipe_ingredient table. Check if new recipe ingredient.
+
+        // Update categories in recipe_category table. Check if new recipe category.
     }
 
     @Override
