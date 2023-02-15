@@ -6,7 +6,9 @@ import com.techelevator.model.meal.Category;
 import com.techelevator.model.meal.Ingredient;
 import com.techelevator.model.meal.Recipe;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.List;
@@ -44,8 +46,17 @@ public class RecipeController {
     }
 
     @PutMapping("/recipes/{id}")
-    public void updateRecipe(@PathVariable int id, @RequestBody Recipe recipe) {
-        recipeDao.update(recipe);
+    public ResponseEntity<Recipe> updateRecipe(@PathVariable int id, @RequestBody Recipe recipe) {
+
+        Recipe validRecipe = recipeDao.getRecipeById(id);
+
+        if (validRecipe == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            recipeDao.update(recipe);
+            return new ResponseEntity<>(recipeDao.getRecipeById(id), HttpStatus.OK);
+        }
+
     }
 
     @DeleteMapping("/recipes/{id}")
@@ -53,11 +64,11 @@ public class RecipeController {
         recipeDao.delete(id);
     }
 
-    @PostMapping("/recipes/{recipe_id}/ingredients/{ingredient_id}")
-    public void addRecipeIngredient(@PathVariable(name = "recipe_id") int recipeId, @PathVariable(name = "ingredient_id") int ingredientId, @RequestBody Ingredient ingredient) {}
+    @PostMapping("/recipes/{recipe_id}/ingredients")
+    public void addRecipeIngredient(@PathVariable(name = "recipe_id") int recipeId, @RequestBody Ingredient ingredient) {}
 
-    @PostMapping("/recipes/{recipe_id}/categories/{category_id}")
-    public void addRecipeCategory(@PathVariable(name = "recipe_id") int recipeId, @PathVariable(name = "category_id") int categoryId, @RequestBody Category category) {}
+    @PostMapping("/recipes/{recipe_id}/categories")
+    public void addRecipeCategory(@PathVariable(name = "recipe_id") int recipeId, @RequestBody Category category) {}
 
     @DeleteMapping("/recipes/{recipe_id}/ingredients/{ingredient_id}")
     public void deleteRecipeIngredient(@PathVariable(name = "recipe_id") int recipeId, @PathVariable(name = "ingredient_id") int ingredientId) {}

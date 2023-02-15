@@ -92,10 +92,15 @@ public class JdbcRecipeDao implements RecipeDao {
     public void update(Recipe recipe) {
 
         // Update recipe data in recipe table
+        String sql = "UPDATE recipe SET recipe_name = ?, instructions = ?, is_sharable = ? WHERE recipe_id = ?;";
+        jdbcTemplate.update(sql, recipe.getName(), recipe.getInstructions(), recipe.isSharable(), recipe.getId());
 
-        // Update ingredients in recipe_ingredient table. Check if new recipe ingredient.
+        // Update ingredients in recipe_ingredient table.
+        for (Ingredient ingredient : recipe.getIngredientList()) {
+            String sqlForIngredients = "UPDATE recipe_ingredient SET quantity = ?, unit_of_measure = ? WHERE recipe_id = ? AND ingredient_id = ?;";
+            jdbcTemplate.update(sqlForIngredients, ingredient.getQuantity(), ingredient.getUnitOfMeasure(), recipe.getId(), ingredient.getId());
+        }
 
-        // Update categories in recipe_category table. Check if new recipe category.
     }
 
     @Override
